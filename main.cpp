@@ -1,6 +1,19 @@
 #include <iostream>
 
+#include "DecisionTree/DecisionNode.h"
+
 int main() {
-    std::cout << "Hello, World!" << std::endl;
-    return 0;
+
+
+    DecisionNode root(1, -1, nullptr);
+
+
+    root.children[0] = new DecisionNode(2, 0 , nullptr);
+    root.children[1] = new DecisionNode(2, 1 , nullptr);
+    root.children[2] = new DecisionNode(2, 2 , nullptr);
+    root.children[3] = new DecisionNode(2, 3 , nullptr);
+    root.children[4] = new DecisionNode(2, 4 , nullptr);
+
+
+
 }
