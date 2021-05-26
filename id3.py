@@ -1,10 +1,8 @@
 import math
-import pandas as pd
 import DecisionNode
 
 def mostFreqClass(dataset):
     valueFreq = {}
-    classes = dataset[-1]
 
     for row in dataset:
         c = row[-1]
@@ -33,25 +31,8 @@ def bestAttribute(attributes, dataset):
         if currInfGain > maxInfGain:
             maxInfGain = currInfGain
             best = attr
-     #   print("cura: ", attr, "curBest: ", best, "curIG: ", currInfGain)
-    return best
 
-#
-# def calculateEntropy(attrIndex, dataset):
-#     valueFreq = {}
-#     entropy = 0.0
-#
-#     for row in dataset:
-#         if row[attrIndex] in valueFreq.keys():
-#             valueFreq[row[attrIndex]] += 1
-#         else:
-#             valueFreq[row[attrIndex]] = 1
-#
-#     for f in valueFreq.values():
-#         fi = f/len(dataset)
-#         entropy -= fi*math.log(fi, math.e)
-#
-#     return entropy
+    return best
 
 def calculateEntropy2(dataset):
     valueFreq = {}
@@ -74,7 +55,6 @@ def calculateInfGain(attrIndex, dataset):
 
     #calculate entire dataset entropy - using classes frequency
     datasetEntropy = calculateEntropy2(dataset)
-   # print(datasetEntropy)
 
     #calculate subsets' entropies
     attrValueFreq = {}
@@ -87,16 +67,10 @@ def calculateInfGain(attrIndex, dataset):
         else:
             attrValueFreq[row[attrIndex]] = 1
 
-   # print(attrValueFreq)
-
     #splittling into subsets by attribute values
     for a in attrValueFreq.keys():
         subset = splitForEntropy(attrIndex, a, dataset)
-        # print("a: ", a)
-        # print("subset: ", subset)
         attrEntropy += float(attrValueFreq[a] / len(dataset) * calculateEntropy2(subset))
-        # print(len(subset))
-        # print(attrEntropy)
 
     return datasetEntropy - attrEntropy
 
@@ -123,12 +97,19 @@ def split_data(attrIndex, attrVal, dataset):
     return newDataset
 
 
-def ID3(classes, attributes, dataset, recursionLevel, parentNode):
+def ID3(attributes, dataset, recursionLevel, parentNode):
     recursionLevel += 1
 
     #same class in all cases, put it into leaf
+    #prepare classes from current dataset
+    classes =[]
+    for row in dataset:
+#        print(row)
+        classes.append(row[-1])
+
+#    print(classes)
     if classes.count(classes[0]) == len(classes):
-        c = classes[0][0]
+        c = classes[0]
         return DecisionNode.DecisionNode(None, c, parentNode)
 
     #no more attributes -> get most frequent class
@@ -146,12 +127,12 @@ def ID3(classes, attributes, dataset, recursionLevel, parentNode):
     attrIndex = d
     del(attributes[d])
 
-    # tested until here
+    # well tested until here
 
     #children nodes
     for attrVal in attrValues:
         subAttr = attributes[:]
-        Tree.children[attrVal] = ID3(classes, attributes, split_data(attrIndex, attrVal, dataset), recursionLevel, Tree)
+        Tree.children[attrVal] = ID3(subAttr, split_data(attrIndex, attrVal, dataset), recursionLevel, Tree)
 
     return Tree
 
@@ -160,23 +141,5 @@ def test1():
     dataset = [[2, 1, 3, 4], [1, 1, 2, 4], [1, 3, 3, 4], [4, 3, 4, 0]]
     dataset2 = [[1,1,0], [2,1,1], [2,2,1], [2,2,0], [2,3,1]]
     attr = [0, 1]
-    classes2 = [0, 0, 1, 1]
-    classes = [[0], [1], [1], [0], [1]]
 
-    print(mostFreqClass(dataset2))
-    #
-    # d = bestAttribute(classes, attr, dataset2)
-    # print("best: ", d)
-    #
-    # attrValues = [row[d] for row in dataset2]
-    # attrValues = set(attrValues)
-    #
-    # print(attrValues)
-    # print(attr[d])
-
-#    print(bestAttribute(attr, dataset))
-#    print(calculateEntropy2(dataset[0]))
-#     print(calculateInfGain(classes, 0, dataset2))
-
-
-    tree = ID3(classes, attr, dataset, 0, None)
+    tree = ID3(attr, dataset2, 0, None)
