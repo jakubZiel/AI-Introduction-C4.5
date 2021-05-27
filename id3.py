@@ -137,8 +137,9 @@ def ID3(attributes, dataset, recursionLevel, parentNode):
 
     return Tree
 
-def Show_ID3(attributes, dataset, recursionLevel, parentNode):
+def Show_ID3(attributes, dataset, recursionLevel, parentNode, id):
     recursionLevel += 1
+    id += 1
 
     #same class in all cases, put it into leaf
     #prepare classes from current dataset
@@ -152,7 +153,7 @@ def Show_ID3(attributes, dataset, recursionLevel, parentNode):
         c = classes[0]
         #return DecisionNode.DecisionNode(None, c, parentNode)
         leaf = Tree()
-        leaf.create_node(c, c, parentNode)
+        leaf.create_node(c, id, parent=parentNode)
         leaf.show()
         return leaf
 
@@ -161,15 +162,16 @@ def Show_ID3(attributes, dataset, recursionLevel, parentNode):
         mfc = mostFreqClass(dataset)
         #return DecisionNode.DecisionNode(None, mfc, parentNode)
         leaf = Tree()
-        leaf.create_node(mfc, mfc, parentNode)
+        leaf.create_node(mfc, id, parent=parentNode)
         leaf.show()
         return leaf
 
     #d - attribute with highest InfGain
     d = bestAttribute(attributes, dataset)
     test_tree = Tree()
-    test_tree.create_node(d, d, parentNode)
+    test_tree.create_node(d, id, parent=parentNode)
     test_tree.show()
+    id+=1
     #Tree = DecisionNode.DecisionNode(d, None, parentNode)
 
     #preparing attribute parameters for children nodes
@@ -184,16 +186,16 @@ def Show_ID3(attributes, dataset, recursionLevel, parentNode):
     #children nodes
     for attrVal in attrValues:
         subAttr = attributes[:]
-        test_tree.create_node(attrVal, attrVal, parent=d)
+        test_tree.create_node(attrVal, id, parent=d)
         test_tree.show()
 
         #tu sie psuje
-        test_tree.paste(attrVal, Show_ID3(subAttr, split_data(attrIndex, attrVal, dataset), recursionLevel, attrVal))
+        test_tree.paste(attrVal, Show_ID3(subAttr, split_data(attrIndex, attrVal, dataset), recursionLevel, attrVal, id+1))
         test_tree.show()
         #test_tree.subtree(attrVal).paste(attrVal, Show_ID3(subAttr, split_data(attrIndex, attrVal, dataset), recursionLevel, test_tree))
 
         #Tree.children[attrVal] = ID3(subAttr, split_data(attrIndex, attrVal, dataset), recursionLevel, Tree)
-
+    test_tree.c
     return test_tree
 
 
@@ -205,5 +207,5 @@ def test1():
 
     #tree = ID3(attr, dataset2, 0, None)
 
-    tree = Show_ID3(attr, dataset2, 0, None)
+    tree = Show_ID3(attr, dataset2, 0, None, 1)
     tree.show()
