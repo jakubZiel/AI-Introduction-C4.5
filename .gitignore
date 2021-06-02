@@ -1,3 +1,7 @@
-.idea
-divorce
-cmake-build-debug
+# Editors
+.idea/
+
+.venv/
+
+# Windows
+Thumbs.db
