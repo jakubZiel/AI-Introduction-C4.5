@@ -1,3 +1,6 @@
-import id3
+import ID3
 
-id3.test1()
+
+ID3.test1()
+
+print()

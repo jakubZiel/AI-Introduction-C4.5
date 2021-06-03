@@ -1,4 +1,5 @@
 import math
+
 from DecisionNode import DecisionNode
 
 
@@ -127,10 +128,24 @@ def ID3(attributes: [list], dataset: [list], parentDecision: [int], parentNode: 
     return decisionNode
 
 
-def test1():
-    dataset = [[2, 1, 3, 4], [1, 1, 2, 4], [1, 3, 3, 4], [4, 3, 4, 0]]
-    dataset2 = [[1, 1, 0], [2, 1, 1], [2, 2, 0], [2, 2, 1], [2, 3, 1]]
-    attributes = [0, 1]
+def predict(root: DecisionNode, attributeValues):
+    if root.isLeaf:
+        return root.classValue
 
-    root = ID3(attributes, dataset2, None, None)
+    decisionAttr = root.attributeNumber
+
+    currAttrValue = attributeValues[decisionAttr]
+
+    return predict(root.children[currAttrValue], attributeValues)
+
+
+def test1():
+    dataset = [[2, 1, 3, 1], [1, 1, 2, 0], [1, 3, 3, 1], [4, 3, 4, 0]]
+    dataset2 = [[1, 1, 0], [2, 1, 1], [2, 2, 0], [2, 2, 1], [2, 3, 1]]
+
+    attributes = [0, 1, 2]
+    attributes2 = [0, 1]
+
+    root = ID3(attributes2, dataset2, None, None)
+
     print()

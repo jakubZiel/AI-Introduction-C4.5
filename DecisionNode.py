@@ -1,18 +1,18 @@
 class DecisionNode:
     def __init__(self, isLeaf, attributeNumber, decisionValue, parent, classValue):
-        self.parent: [DecisionNode] = parent
+        self.parent: DecisionNode = parent
 
         self.children: [DecisionNode] = [None] * 5
 
-        self.isLeaf: [bool] = isLeaf
+        self.isLeaf: bool = isLeaf
         # if not leaf node, then should stay None
-        self.classValue: [int] = classValue
+        self.classValue: int = classValue
 
         # tells which child of parent node is this node
-        self.decisionValue: [int] = decisionValue
+        self.decisionValue: int = decisionValue
 
         # decision this node makes
-        self.attributeNumber: [int] = attributeNumber
+        self.attributeNumber: int = attributeNumber
 
     @staticmethod
     def createLeaf(classValue, parentDecision, parent):
