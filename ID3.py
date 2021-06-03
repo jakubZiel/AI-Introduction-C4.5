@@ -98,7 +98,7 @@ def dataset_slice(attrIndex, attrVal, dataset):
     return newDataset
 
 
-def ID3(attributes: list, dataset: list, parentDecision: int, parentNode: DecisionNode):
+def ID3(attributes: list, dataset: list, parentDecision, parentNode: DecisionNode):
     classes = []
     for record in dataset:
         classes.append(record[-1])
@@ -123,7 +123,7 @@ def ID3(attributes: list, dataset: list, parentDecision: int, parentNode: Decisi
 
     for val in attributeValues:
         subDataSet = dataset_slice(bestSplitAttribute, val, dataset)
-        decisionNode.children[val] = ID3(attributes, subDataSet, val, decisionNode)
+        decisionNode.children[val] = ID3(attributes.copy(), subDataSet, val, decisionNode)
 
     return decisionNode
 
@@ -141,10 +141,10 @@ def predict(root: DecisionNode, attributeValues):
 
 def test1():
     dataset = [[2, 1, 3, 1], [1, 1, 2, 0], [1, 3, 3, 1], [4, 3, 4, 0]]
-    dataset2 = [[1, 1, 0], [2, 1, 1], [2, 2, 0], [2, 2, 1], [2, 3, 1]]
+    dataset2 = [[1, 1, 2, 0], [2, 1, 4, 1], [2, 2, 2, 0], [2, 2, 0, 1], [2, 3, 1, 1], [3, 1, 0, 1], [4, 3, 0, 0], [1, 4, 0, 1], [1, 1, 4, 0], [1, 1, 1, 1]]
 
     attributes = [0, 1, 2]
-    attributes2 = [0, 1]
+    attributes2 = [0, 1, 2]
 
     root = ID3(attributes2, dataset2, None, None)
 
