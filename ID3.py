@@ -98,7 +98,7 @@ def dataset_slice(attrIndex, attrVal, dataset):
     return newDataset
 
 
-def ID3(attributes: [list], dataset: [list], parentDecision: [int], parentNode: [DecisionNode]):
+def ID3(attributes: list, dataset: list, parentDecision: int, parentNode: DecisionNode):
     classes = []
     for record in dataset:
         classes.append(record[-1])
