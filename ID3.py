@@ -147,5 +147,3 @@ def test1():
     attributes2 = [0, 1, 2]
 
     root = ID3(attributes2, dataset2, None, None)
-
-    print()
