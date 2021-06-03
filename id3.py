@@ -1,6 +1,6 @@
 import math
-import DecisionNode
-from treelib import Tree, Node
+from DecisionNode import DecisionNode
+
 
 def mostFreqClass(dataset):
     valueFreq = {}
@@ -16,7 +16,7 @@ def mostFreqClass(dataset):
     maxFreq = 0
 
     for k in valueFreq.keys():
-        if valueFreq[k]>maxFreq:
+        if valueFreq[k] > maxFreq:
             maxFreq = valueFreq[k]
             mfc = k
 
@@ -35,6 +35,7 @@ def bestAttribute(attributes, dataset):
 
     return best
 
+
 def calculateEntropy2(dataset):
     valueFreq = {}
     entropy = 0.0
@@ -46,29 +47,28 @@ def calculateEntropy2(dataset):
             valueFreq[row[-1]] = 1
 
     for f in valueFreq.values():
-        fi = f/len(dataset)
-        entropy -= fi*math.log(fi, math.e)
+        fi = f / len(dataset)
+        entropy -= fi * math.log(fi, math.e)
 
     return entropy
 
 
 def calculateInfGain(attrIndex, dataset):
-
-    #calculate entire dataset entropy - using classes frequency
+    # calculate entire dataset entropy - using classes frequency
     datasetEntropy = calculateEntropy2(dataset)
 
-    #calculate subsets' entropies
+    # calculate subsets' entropies
     attrValueFreq = {}
     attrEntropy = 0.0
 
-    #looking for attribute values
+    # looking for attribute values
     for row in dataset:
         if row[attrIndex] in attrValueFreq.keys():
             attrValueFreq[row[attrIndex]] += 1
         else:
             attrValueFreq[row[attrIndex]] = 1
 
-    #splittling into subsets by attribute values
+    # splittling into subsets by attribute values
     for a in attrValueFreq.keys():
         subset = splitForEntropy(attrIndex, a, dataset)
         attrEntropy += float(attrValueFreq[a] / len(dataset) * calculateEntropy2(subset))
@@ -87,125 +87,50 @@ def splitForEntropy(attrIndex, attrVal, dataset):
     return newDataset
 
 
-def split_data(attrIndex, attrVal, dataset):
+def dataset_slice(attrIndex, attrVal, dataset):
     newDataset = []
 
-    for row in dataset:
-        if row[attrIndex] == attrVal:
-            subset = row[:attrIndex] + row[attrIndex+1:]
-            newDataset.append(subset)
+    for record in dataset:
+        if record[attrIndex] == attrVal:
+            newDataset.append(record)
 
     return newDataset
 
 
-def ID3(attributes, dataset, recursionLevel, parentNode):
-    recursionLevel += 1
+def ID3(attributes: [list], dataset: [list], parentDecision: [int], parentNode: [DecisionNode]):
+    classes = []
+    for record in dataset:
+        classes.append(record[-1])
 
-    #same class in all cases, put it into leaf
-    #prepare classes from current dataset
-    classes =[]
-    for row in dataset:
-#        print(row)
-        classes.append(row[-1])
-
-#    print(classes)
     if classes.count(classes[0]) == len(classes):
-        c = classes[0]
-        return DecisionNode.DecisionNode(None, c, parentNode)
+        return DecisionNode.createLeaf(classes[0], parentDecision, parentNode)
 
-    #no more attributes -> get most frequent class
-    if (len(attributes) - 1) <= 0:
-        mfc = mostFreqClass(dataset)
-        return DecisionNode.DecisionNode(None, mfc, parentNode)
+    if len(attributes) == 0:
+        majorityClass = mostFreqClass(dataset)
+        return DecisionNode.createLeaf(majorityClass, parentDecision, parentNode)
 
-    #d - attribute with highest InfGain
-    d = bestAttribute(attributes, dataset)
-    Tree = DecisionNode.DecisionNode(d, None, parentNode)
+    bestSplitAttribute = bestAttribute(attributes, dataset)
+    attributes.remove(bestSplitAttribute)
 
-    #preparing attribute parameters for children nodes
-    attrValues = [row[d] for row in dataset]
-    attrValues = set(attrValues)
-    attrIndex = d
-    del(attributes[d])
+    decisionNode = DecisionNode.createDecision(bestSplitAttribute, parentDecision, parentNode)
 
-    # well tested until here
+    attributeValues = set()
 
-    #children nodes
-    for attrVal in attrValues:
-        subAttr = attributes[:]
-        Tree.children[attrVal] = ID3(subAttr, split_data(attrIndex, attrVal, dataset), recursionLevel, Tree)
+    for record in dataset:
+        attrVal = record[bestSplitAttribute]
+        attributeValues.add(attrVal)
 
-    return Tree
+    for val in attributeValues:
+        subDataSet = dataset_slice(bestSplitAttribute, val, dataset)
+        decisionNode.children[val] = ID3(attributes, subDataSet, val, decisionNode)
 
-def Show_ID3(attributes, dataset, recursionLevel, parentNode, id):
-    recursionLevel += 1
-    id += 1
-
-    #same class in all cases, put it into leaf
-    #prepare classes from current dataset
-    classes =[]
-    for row in dataset:
-        #        print(row)
-        classes.append(row[-1])
-
-    #    print(classes)
-    if classes.count(classes[0]) == len(classes):
-        c = classes[0]
-        #return DecisionNode.DecisionNode(None, c, parentNode)
-        leaf = Tree()
-        leaf.create_node(c, id, parent=parentNode)
-        leaf.show()
-        return leaf
-
-    #no more attributes -> get most frequent class
-    if (len(attributes) - 1) <= 0:
-        mfc = mostFreqClass(dataset)
-        #return DecisionNode.DecisionNode(None, mfc, parentNode)
-        leaf = Tree()
-        leaf.create_node(mfc, id, parent=parentNode)
-        leaf.show()
-        return leaf
-
-    #d - attribute with highest InfGain
-    d = bestAttribute(attributes, dataset)
-    test_tree = Tree()
-    test_tree.create_node(d, id, parent=parentNode)
-    test_tree.show()
-    id+=1
-    #Tree = DecisionNode.DecisionNode(d, None, parentNode)
-
-    #preparing attribute parameters for children nodes
-    attrIndex = d
-    del(attributes[d])
-
-    attrValues = [row[d] for row in dataset]
-    attrValues = set(attrValues)
-
-    # well tested until here
-
-    #children nodes
-    for attrVal in attrValues:
-        subAttr = attributes[:]
-        test_tree.create_node(attrVal, id, parent=d)
-        test_tree.show()
-
-        #tu sie psuje
-        test_tree.paste(attrVal, Show_ID3(subAttr, split_data(attrIndex, attrVal, dataset), recursionLevel, attrVal, id+1))
-        test_tree.show()
-        #test_tree.subtree(attrVal).paste(attrVal, Show_ID3(subAttr, split_data(attrIndex, attrVal, dataset), recursionLevel, test_tree))
-
-        #Tree.children[attrVal] = ID3(subAttr, split_data(attrIndex, attrVal, dataset), recursionLevel, Tree)
-    test_tree.c
-    return test_tree
+    return decisionNode
 
 
 def test1():
-
     dataset = [[2, 1, 3, 4], [1, 1, 2, 4], [1, 3, 3, 4], [4, 3, 4, 0]]
-    dataset2 = [[1,1,0], [2,1,1], [2,2,1], [2,2,0], [2,3,1]]
-    attr = [0, 1]
+    dataset2 = [[1, 1, 0], [2, 1, 1], [2, 2, 0], [2, 2, 1], [2, 3, 1]]
+    attributes = [0, 1]
 
-    #tree = ID3(attr, dataset2, 0, None)
-
-    tree = Show_ID3(attr, dataset2, 0, None, 1)
-    tree.show()
+    root = ID3(attributes, dataset2, None, None)
+    print()
