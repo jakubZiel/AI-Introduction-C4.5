@@ -160,5 +160,36 @@ def test():
     data = ImportData.import_data("data/divorce.csv")
     attributes = list(range(54))
 
-    root = ID3(attributes, data, None, None)
+    zeros = []
+    ones = []
+    output = []
+
+    dataset = []
+
+    for record in data:
+        n_record = []
+        for i in record:
+            n_record.append(i)
+        dataset.append(n_record)
+
+    for record in dataset:
+        if record[-1] == 0:
+            zeros.append(record)
+        else:
+            ones.append(record)
+
+    index0 = 0
+    index1 = 0
+
+    for i in range(len(dataset)):
+        if i % 2 == 0:
+            if index0 < len(zeros):
+                output.append(zeros[index0])
+                index0 += 1
+        else:
+            if index1 < len(ones):
+                output.append(ones[index1])
+                index1 += 1
+
+    root = ID3(attributes, output, None, None)
     print()
