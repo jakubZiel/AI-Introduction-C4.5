@@ -1,6 +1,7 @@
 import math
 import random
 from DecisionNode import DecisionNode
+import ImportData
 
 
 def mostFreqClass(dataset):
@@ -129,7 +130,6 @@ def ID3(attributes: list, dataset: list, parentDecision, parentNode: DecisionNod
 
 
 def predict(root: DecisionNode, attributeValues):
-
     if root is None:
         return random.randint(0, 1)
 
@@ -155,4 +155,10 @@ def test1():
 
     root = ID3(attributes2, dataset2, None, None)
 
+
+def test():
+    data = ImportData.import_data("data/divorce.csv")
+    attributes = list(range(54))
+
+    root = ID3(attributes, data, None, None)
     print()
