@@ -1,8 +1,11 @@
+from typing import List
+
+
 class DecisionNode:
     def __init__(self, isLeaf, attributeNumber, decisionValue, parent, classValue):
         self.parent: DecisionNode = parent
 
-        self.children: [DecisionNode] = [None] * 5
+        self.children: List[DecisionNode] = [None] * 5
 
         self.isLeaf: bool = isLeaf
         # if not leaf node, then should stay None
