@@ -1,5 +1,5 @@
 import math
-
+import random
 from DecisionNode import DecisionNode
 
 
@@ -129,6 +129,10 @@ def ID3(attributes: list, dataset: list, parentDecision, parentNode: DecisionNod
 
 
 def predict(root: DecisionNode, attributeValues):
+
+    if root is None:
+        return random.randint(0, 1)
+
     if root.isLeaf:
         return root.classValue
 
@@ -141,9 +145,14 @@ def predict(root: DecisionNode, attributeValues):
 
 def test1():
     dataset = [[2, 1, 3, 1], [1, 1, 2, 0], [1, 3, 3, 1], [4, 3, 4, 0]]
-    dataset2 = [[1, 1, 2, 0], [2, 1, 4, 1], [2, 2, 2, 0], [2, 2, 0, 1], [2, 3, 1, 1], [3, 1, 0, 1], [4, 3, 0, 0], [1, 4, 0, 1], [1, 1, 4, 0], [1, 1, 1, 1]]
+
+    dataset2 = [[1, 1, 2, 0, 0], [2, 1, 4, 1, 1], [2, 2, 2, 2, 0], [2, 2, 0, 3, 1], [2, 3, 1, 4, 1],
+                [1, 4, 0, 2, 1], [1, 1, 4, 3, 0], [1, 1, 1, 4, 1], [3, 1, 0, 1, 1], [4, 3, 0, 0, 0],
+                [3, 2, 1, 4, 0], [4, 0, 2, 3, 1], [3, 4, 3, 2, 0], [4, 0, 4, 1, 0], [1, 2, 4, 0, 1]]
 
     attributes = [0, 1, 2]
-    attributes2 = [0, 1, 2]
+    attributes2 = [0, 1, 2, 3]
 
     root = ID3(attributes2, dataset2, None, None)
+
+    print()
