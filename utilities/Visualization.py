@@ -36,7 +36,7 @@ def visualize(root: DecisionNode):
 
     traverse(root, tree, id)
 
-    return tree
+    tree.show()
 
 
 def test():
@@ -46,6 +46,9 @@ def test():
 
     attributes2 = [0, 1, 2, 3]
 
+    print(attributes2[:2])
+    print(attributes2[2:])
+
     dataset3 = [[0, 1, 0], [1, 1, 1], [1, 2, 1], [1, 2, 0], [1, 3, 1]]
     attributes3 = [0, 1]
 
@@ -53,8 +56,6 @@ def test():
 
     # root = ID3(attributes2, dataset2, None, None)
 
-    visualizedTree = visualize(root)
-    visualizedTree.show()
-
+    #visualize(root)
 
 test()
