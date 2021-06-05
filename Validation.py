@@ -77,12 +77,13 @@ def small_test():
     crossValidation(dataset2, 3, attributes2, ID3)
 
 
-def test():
+# can't be 1
+def test(subsetNumber):
     attributes = list(range(54))
 
     dataset = ImportData.convert()
 
-    error, errors = crossValidation(dataset, 10, attributes, C45)
+    error, errors = crossValidation(dataset, subsetNumber, attributes, C45)
 
     error = float("{:.3f}".format(error))
     print("avg error : " + str(error))
@@ -92,5 +93,3 @@ def test():
 
     print("errors : " + str(errors))
 
-
-test()
