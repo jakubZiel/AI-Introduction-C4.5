@@ -1,7 +1,7 @@
 import math
 import random
 from DecisionNode import DecisionNode
-import ImportData
+from utilities import ImportData
 
 
 def mostFreqClass(dataset):

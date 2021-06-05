@@ -1,6 +1,6 @@
 from trees.ID3 import *
 from statistics import mean
-import ImportData
+from utilities import ImportData
 from trees.C45 import *
 
 
@@ -85,11 +85,20 @@ def test(subsetNumber, model):
 
     error, errors = crossValidation(dataset, subsetNumber, attributes, model)
 
+    modelName = None
+    if model == ID3:
+        modelName = "ID3"
+    else:
+        if model == C45:
+            modelName = "C45"
+        else:
+            raise Exception("model type is not in {ID3, C45}")
+
+    print(modelName)
     error = float("{:.3f}".format(error))
     print("avg error : " + str(error))
 
     for i in range(len(errors)):
         errors[i] = float("{:.3f}".format(errors[i]))
 
-    print("errors : " + str(errors))
-
+    print("errors : " + str(errors) + "\n")
