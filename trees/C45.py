@@ -95,15 +95,3 @@ def C45(attributes: list, dataset: list, pruningSet):
             checkPath(root, leaf, pruningSet, leaves)
 
     return root
-
-
-def small_test():
-    dataset2 = [[1, 1, 2, 0, 0], [2, 1, 4, 1, 1], [2, 2, 2, 2, 0], [2, 2, 0, 3, 1], [2, 3, 1, 4, 1],
-                [1, 4, 0, 2, 0], [1, 1, 4, 3, 0], [1, 1, 1, 4, 1], [3, 1, 0, 1, 1], [4, 3, 0, 0, 0],
-                [3, 2, 1, 4, 0], [4, 0, 2, 3, 1], [3, 4, 3, 2, 0], [4, 0, 4, 1, 0], [1, 2, 4, 0, 1]]
-
-    attributes2 = [0, 1, 2, 3]
-
-    pruningSet = [[1, 0, 2, 1, 0], [3, 2, 1, 0, 1], [0, 2, 1, 3, 0], [4, 2, 1, 4, 1]]
-
-    root = C45(attributes2, dataset2, pruningSet)

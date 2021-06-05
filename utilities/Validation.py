@@ -67,16 +67,6 @@ def crossValidation(dataset: list, subsetNumber: int, attributes: list, model):
     return avgError, errors
 
 
-def small_test():
-    dataset2 = [[1, 1, 2, 0, 1], [2, 1, 4, 1, 1], [2, 2, 2, 2, 0], [2, 2, 0, 3, 1], [2, 3, 1, 4, 1],
-                [1, 4, 0, 2, 1], [1, 1, 4, 3, 0], [1, 1, 1, 4, 1], [3, 1, 0, 1, 1], [4, 3, 0, 0, 0],
-                [3, 2, 1, 4, 0], [4, 0, 2, 3, 1], [3, 4, 3, 2, 0], [4, 0, 4, 1, 0], [1, 2, 4, 0, 1]]
-
-    attributes2 = [0, 1, 2, 3]
-
-    crossValidation(dataset2, 3, attributes2, ID3)
-
-
 # can't be 1
 def test(subsetNumber, model):
     attributes = list(range(54))
