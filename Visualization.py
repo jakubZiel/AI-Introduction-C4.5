@@ -1,24 +1,23 @@
 from treelib import Tree
-from DecisionNode import DecisionNode
-from ID3 import *
+from trees.ID3 import *
 
 
-def traverse(root: DecisionNode, visualTree: Tree, parentid: int):
+def traverse(root: DecisionNode, visualTree: Tree, parentId: int):
     if root is None or root.isLeaf:
         return
 
-    nextid = parentid
+    nextid = parentId
 
     for child in root.children:
         nextid += 1
         if child is None:
-            visualTree.create_node("none", nextid, parent=parentid)
+            visualTree.create_node("none", nextid, parent=parentId)
         else:
             if child.isLeaf:
-                visualTree.create_node("l" + str(child.classValue), nextid, parent=parentid)
+                visualTree.create_node("l" + str(child.classValue), nextid, parent=parentId)
             else:
                 visualTree.create_node("d" + str(child.attributeNumber), nextid,
-                                       parent=parentid)
+                                       parent=parentId)
                 nextid = traverse(child, visualTree, nextid)
 
     return nextid

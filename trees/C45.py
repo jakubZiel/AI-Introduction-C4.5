@@ -1,5 +1,5 @@
 from DecisionNode import DecisionNode
-from ID3 import ID3, predict
+from trees.ID3 import ID3, predict
 
 
 def traverseLeaves(root: DecisionNode, frequencies: list):

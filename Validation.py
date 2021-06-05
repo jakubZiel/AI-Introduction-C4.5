@@ -1,7 +1,7 @@
-from ID3 import *
+from trees.ID3 import *
 from statistics import mean
 import ImportData
-from C45 import *
+from trees.C45 import *
 
 
 def split(dataset: list, subsetNumber: int):
@@ -78,12 +78,12 @@ def small_test():
 
 
 # can't be 1
-def test(subsetNumber):
+def test(subsetNumber, model):
     attributes = list(range(54))
 
     dataset = ImportData.convert()
 
-    error, errors = crossValidation(dataset, subsetNumber, attributes, C45)
+    error, errors = crossValidation(dataset, subsetNumber, attributes, model)
 
     error = float("{:.3f}".format(error))
     print("avg error : " + str(error))

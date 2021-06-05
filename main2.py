@@ -1,5 +1,5 @@
-import C45
+from Validation import *
 
 
-C45.small_test()
-
+test(5, C45)
+test(5, ID3)
