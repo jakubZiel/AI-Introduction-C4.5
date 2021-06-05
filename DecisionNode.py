@@ -11,10 +11,10 @@ class DecisionNode:
         # if not leaf node, then should stay None
         self.classValue: int = classValue
 
-        # tells which child of parent node is this node
+        # tells which child of parent is this node {0, 1, 2, 3, 4}
         self.decisionValue: int = decisionValue
 
-        # decision this node makes
+        # attribute number that this decision node represents
         self.attributeNumber: int = attributeNumber
 
     @staticmethod

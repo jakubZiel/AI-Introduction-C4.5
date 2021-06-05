@@ -70,10 +70,10 @@ def calculateInfGain(attrIndex, dataset):
         else:
             attrValueFreq[row[attrIndex]] = 1
 
-    # splittling into subsets by attribute values
-    for a in attrValueFreq.keys():
-        subset = splitForEntropy(attrIndex, a, dataset)
-        attrEntropy += float(attrValueFreq[a] / len(dataset) * calculateEntropy2(subset))
+    # splitting into subsets by attribute values
+    for attr in attrValueFreq.keys():
+        subset = splitForEntropy(attrIndex, attr, dataset)
+        attrEntropy += float(attrValueFreq[attr] / len(dataset) * calculateEntropy2(subset))
 
     return datasetEntropy - attrEntropy
 
@@ -121,6 +121,8 @@ def ID3(attributes: list, dataset: list, parentDecision, parentNode: DecisionNod
     for record in dataset:
         attrVal = record[bestSplitAttribute]
         attributeValues.add(attrVal)
+        if len(attributes) == 5:
+            break
 
     for val in attributeValues:
         subDataSet = dataset_slice(bestSplitAttribute, val, dataset)
@@ -154,42 +156,14 @@ def test1():
     attributes2 = [0, 1, 2, 3]
 
     root = ID3(attributes2, dataset2, None, None)
+    print()
 
 
 def test():
-    data = ImportData.import_data("data/divorce.csv")
     attributes = list(range(54))
 
-    zeros = []
-    ones = []
-    output = []
-
-    dataset = []
-
-    for record in data:
-        n_record = []
-        for i in record:
-            n_record.append(i)
-        dataset.append(n_record)
-
-    for record in dataset:
-        if record[-1] == 0:
-            zeros.append(record)
-        else:
-            ones.append(record)
-
-    index0 = 0
-    index1 = 0
-
-    for i in range(len(dataset)):
-        if i % 2 == 0:
-            if index0 < len(zeros):
-                output.append(zeros[index0])
-                index0 += 1
-        else:
-            if index1 < len(ones):
-                output.append(ones[index1])
-                index1 += 1
+    output = ImportData.convert()
 
     root = ID3(attributes, output, None, None)
+
     print()
