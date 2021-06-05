@@ -1,4 +1,4 @@
-from treelib import Tree, Node
+from treelib import Tree
 from DecisionNode import DecisionNode
 from ID3 import *
 
@@ -23,11 +23,12 @@ def traverse(root: DecisionNode, visualTree: Tree, parentid: int):
 
     return nextid
 
+
 def visualize(root: DecisionNode):
     tree = Tree()
     id = 0
 
-    #l for leaves, d for decision nodes
+    # l for leaves, d for decision nodes
 
     if root.isLeaf:
         tree.create_node("l" + str(root.classValue), id)
@@ -47,13 +48,14 @@ def test():
     attributes2 = [0, 1, 2, 3]
 
     dataset3 = [[0, 1, 0], [1, 1, 1], [1, 2, 1], [1, 2, 0], [1, 3, 1]]
-    attributes3 = [0,1]
+    attributes3 = [0, 1]
 
     root = ID3(attributes3, dataset3, None, None)
 
-    #root = ID3(attributes2, dataset2, None, None)
+    # root = ID3(attributes2, dataset2, None, None)
 
     visualizedTree = visualize(root)
     visualizedTree.show()
+
 
 test()
