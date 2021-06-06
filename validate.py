@@ -3,13 +3,15 @@ from utilities.Visualization import *
 
 
 def aggregateResults():
-    print("No cross validation, entire dataset:")
+    print("No cross validation. Comparing look of trees for ID3 and C4.5:")
+    visualizeC45()
 
-    print("With cross validation:")
-    for i in range(5, 1, -1):
+    numberOfTests = 10
+
+    print("With cross validation. Number of tests: ", numberOfTests)
+    for i in range(5, 11):
         print("K = ", i)
-        test(i, ID3)
-        test(i, C45)
+        testMore(i, ID3, numberOfTests)
+        testMore(i, C45, numberOfTests)
 
-
-visualizeC45()
+aggregateResults()
