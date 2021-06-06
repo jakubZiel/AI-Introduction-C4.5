@@ -1,5 +1,6 @@
 from DecisionNode import DecisionNode
 from trees.ID3 import ID3, predict
+from utilities import ImportData
 
 
 def traverseLeaves(root: DecisionNode, frequencies: list):
@@ -93,5 +94,17 @@ def C45(attributes: list, dataset: list, pruningSet):
     for leaf in leaves:
         if leaf is not None:
             checkPath(root, leaf, pruningSet, leaves)
+
+    return root
+
+
+def test():
+    attributes = list(range(54))
+
+    output = ImportData.convert()
+
+    teachingSetSize = int(len(output) * 0.8)
+
+    root = C45(attributes, output[:teachingSetSize], output[teachingSetSize:])
 
     return root

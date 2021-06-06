@@ -1,4 +1,6 @@
 from treelib import Tree
+
+from trees.C45 import findLeaves, checkPath
 from trees.ID3 import *
 
 
@@ -39,23 +41,20 @@ def visualize(root: DecisionNode):
     tree.show()
 
 
-def test():
-    dataset2 = [[1, 1, 2, 0, 0], [2, 1, 4, 1, 1], [2, 2, 2, 2, 1], [2, 2, 0, 3, 1], [2, 3, 1, 4, 1],
-                [1, 4, 0, 2, 1], [1, 1, 4, 3, 0], [1, 1, 1, 4, 1], [3, 1, 0, 1, 1], [4, 3, 0, 0, 0],
-                [3, 2, 1, 4, 0], [4, 0, 2, 3, 1], [3, 4, 3, 2, 0], [4, 0, 4, 1, 0], [1, 2, 4, 0, 1]]
+def visualizeC45():
+    dataset = ImportData.convert()
+    attributes = list(range(54))
 
-    attributes2 = [0, 1, 2, 3]
+    teachingSetSize = int(len(dataset) * 0.90)
 
-    print(attributes2[:2])
-    print(attributes2[2:])
+    root = ID3(attributes, dataset[:teachingSetSize], None, None)
 
-    dataset3 = [[0, 1, 0], [1, 1, 1], [1, 2, 1], [1, 2, 0], [1, 3, 1]]
-    attributes3 = [0, 1]
+    visualize(root)
 
-    root = ID3(attributes3, dataset3, None, None)
+    leaves = findLeaves(root)
+    for leaf in leaves:
+        if leaf is not None:
+            checkPath(root, leaf, dataset[teachingSetSize:], leaves)
 
-    # root = ID3(attributes2, dataset2, None, None)
-
-    #visualize(root)
-
-test()
+    visualize(root)
+    return root

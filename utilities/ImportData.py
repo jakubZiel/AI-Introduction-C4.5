@@ -17,7 +17,6 @@ def convert():
         for i in record:
             n_record.append(i)
 
-        # n_record[-1] = random.randint(0, 1)
         output.append(n_record)
 
     return output

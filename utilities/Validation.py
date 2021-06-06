@@ -67,7 +67,6 @@ def crossValidation(dataset: list, subsetNumber: int, attributes: list, model):
     return avgError, errors
 
 
-# can't be 1
 def test(subsetNumber, model):
     attributes = list(range(54))
 
