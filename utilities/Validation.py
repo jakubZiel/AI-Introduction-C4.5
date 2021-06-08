@@ -59,9 +59,6 @@ def crossValidation(dataset: list, subsetNumber: int, attributes: list, model):
 
     return errors
 
-   # avgError = mean(errors)
-   # return avgError, errors
-
 
 def testMore(subsetNumber, model, testNumber):
     attributes = list(range(54))
@@ -69,7 +66,7 @@ def testMore(subsetNumber, model, testNumber):
     avgErrors = []
 
     # aggregate errors from several tests
-    for i in range (0, testNumber):
+    for i in range(0, testNumber):
         dataset = ImportData.convert()
         errors = crossValidation(dataset, subsetNumber, attributes, model)
         if len(avgErrors) == 0:
@@ -79,7 +76,7 @@ def testMore(subsetNumber, model, testNumber):
                 avgErrors[j] += errors[j]
 
     for i in range(len(avgErrors)):
-        avgErrors[i] = avgErrors[i]/testNumber
+        avgErrors[i] = avgErrors[i] / testNumber
 
     avgError = mean(avgErrors)
 
