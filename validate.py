@@ -7,8 +7,8 @@ def aggregateResults():
     print("With cross validation:")
     for i in range(10, 4, -1):
         print("K = ", i)
-        test(i, ID3)
-        test(i, C45)
+        testMore(i, ID3, 10)
+        testMore(i, C45, 10)
 
 
 aggregateResults()
