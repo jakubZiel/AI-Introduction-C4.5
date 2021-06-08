@@ -57,17 +57,31 @@ def crossValidation(dataset: list, subsetNumber: int, attributes: list, model):
         error = error / len(testingSet)
         errors.append(error)
 
-    avgError = mean(errors)
+    return errors
 
-    return avgError, errors
+   # avgError = mean(errors)
+   # return avgError, errors
 
 
-def test(subsetNumber, model):
+def testMore(subsetNumber, model, testNumber):
     attributes = list(range(54))
 
-    dataset = ImportData.convert()
+    avgErrors = []
 
-    error, errors = crossValidation(dataset, subsetNumber, attributes, model)
+    # aggregate errors from several tests
+    for i in range (0, testNumber):
+        dataset = ImportData.convert()
+        errors = crossValidation(dataset, subsetNumber, attributes, model)
+        if len(avgErrors) == 0:
+            avgErrors = errors
+        else:
+            for j in range(len(avgErrors)):
+                avgErrors[j] += errors[j]
+
+    for i in range(len(avgErrors)):
+        avgErrors[i] = avgErrors[i]/testNumber
+
+    avgError = mean(avgErrors)
 
     if model == ID3:
         modelName = "ID3"
@@ -78,10 +92,10 @@ def test(subsetNumber, model):
             raise Exception("model type is not in {ID3, C45}")
 
     print(modelName)
-    error = float("{:.3f}".format(error))
-    print("avg error : " + str(error))
+    avgError = float("{:.3f}".format(avgError))
+    print("avg error : " + str(avgError))
 
-    for i in range(len(errors)):
-        errors[i] = float("{:.3f}".format(errors[i]))
+    for i in range(len(avgErrors)):
+        avgErrors[i] = float("{:.3f}".format(avgErrors[i]))
 
-    print("errors : " + str(errors) + "\n")
+    print("errors : " + str(avgErrors) + "\n")
