@@ -1,6 +1,5 @@
 from trees.ID3 import *
 from statistics import mean
-from utilities import ImportData
 from trees.C45 import *
 
 
@@ -45,13 +44,9 @@ def crossValidation(dataset: list, subsetNumber: int, attributes: list, model):
             root = model(attributes.copy(), teachingSet, None, None)
         else:
             if model == C45:
-                teachingSetSize = len(teachingSet)
-                buildingSetSize = int(teachingSetSize * 0.8)
 
-                buildingSet = teachingSet[:buildingSetSize]
-                pruningSet = teachingSet[buildingSetSize:]
-
-                root = model(attributes.copy(), buildingSet, pruningSet)
+                datasetSize = len(teachingSet) + len(testingSet)
+                root = model(attributes.copy(), teachingSet, datasetSize)
             else:
                 raise Exception("model type is not in {ID3, C45}")
 
@@ -74,7 +69,6 @@ def test(subsetNumber, model):
 
     error, errors = crossValidation(dataset, subsetNumber, attributes, model)
 
-    modelName = None
     if model == ID3:
         modelName = "ID3"
     else:

@@ -1,6 +1,7 @@
 from DecisionNode import DecisionNode
 from trees.ID3 import ID3, predict
 from utilities import ImportData
+import math
 
 
 def traverseLeaves(root: DecisionNode, frequencies: list):
@@ -42,14 +43,18 @@ def findLeaves(root: DecisionNode):
     return leaves
 
 
-def testError(root: DecisionNode, pruningSet: list):
+def testError(root: DecisionNode, teachingSet: list, datasetSize: int):
     missed = 0
 
-    for record in pruningSet:
+    for record in teachingSet:
         if predict(root, record[:-1]) != record[-1]:
             missed += 1
 
-    return float(missed) / float(len(pruningSet))
+    teachingSetError = float(missed) / float(len(teachingSet))
+
+    testSetEstimatedError = teachingSetError + math.sqrt(teachingSetError * (1 - teachingSetError)) / datasetSize
+
+    return testSetEstimatedError
 
 
 def pruneNode(node: DecisionNode, classVal, leaves: list):
@@ -70,7 +75,7 @@ def pruneNode(node: DecisionNode, classVal, leaves: list):
             pass
 
 
-def checkPath(root: DecisionNode, leaf: DecisionNode, pruningSet: list, leaves: list):
+def checkPath(root: DecisionNode, leaf: DecisionNode, teachingSet: list, leaves: list, datasetSize: int):
     node = leaf.parent
 
     while node is not None:
@@ -78,22 +83,22 @@ def checkPath(root: DecisionNode, leaf: DecisionNode, pruningSet: list, leaves: 
         mostFrequentClass = mostFrequentInTree(node)
         substitute = DecisionNode.createLeaf(mostFrequentClass, node.decisionValue, node.parent)
 
-        error0 = testError(node, pruningSet)
-        error1 = testError(substitute, pruningSet)
+        error0 = testError(node, teachingSet, datasetSize)
+        error1 = testError(substitute, teachingSet, datasetSize)
 
-        if error0 > error1:
+        if error0 >= error1:
             pruneNode(node, mostFrequentClass, leaves)
 
         node = node.parent
 
 
-def C45(attributes: list, dataset: list, pruningSet):
-    root = ID3(attributes, dataset, None, None)
+def C45(attributes: list, teachingSet: list, datasetSize):
+    root = ID3(attributes, teachingSet, None, None)
 
     leaves = findLeaves(root)
     for leaf in leaves:
         if leaf is not None:
-            checkPath(root, leaf, pruningSet, leaves)
+            checkPath(root, leaf, teachingSet, leaves, datasetSize)
 
     return root
 
@@ -105,6 +110,18 @@ def test():
 
     teachingSetSize = int(len(output) * 0.8)
 
-    root = C45(attributes, output[:teachingSetSize], output[teachingSetSize:])
+    teachingSet = output[:teachingSetSize]
+    testingSet = output[teachingSetSize:]
+    datasetSize = len(output)
+
+    root = C45(attributes.copy(), teachingSet, datasetSize)
+
+    errors = 0
+
+    for record in testingSet:
+        if predict(root, record[:-1]) != record[-1]:
+            errors += 1
+
+    print(errors / len(testingSet))
 
     return root
