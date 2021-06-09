@@ -106,7 +106,7 @@ def C45(attributes: list, teachingSet: list, datasetSize):
 def test():
     attributes = list(range(54))
 
-    output = ImportData.convert()
+    output = ImportData.convert("data/divorce.csv")
 
     teachingSetSize = int(len(output) * 0.8)
 

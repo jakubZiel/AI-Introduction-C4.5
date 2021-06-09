@@ -7,8 +7,8 @@ def import_data(filePath):
     return data
 
 
-def convert():
-    data = import_data("data/divorce.csv")
+def convert(file_path):
+    data = import_data(file_path)
 
     output = []
 

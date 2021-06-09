@@ -67,7 +67,7 @@ def testMore(subsetNumber, model, testNumber):
 
     # aggregate errors from several tests
     for i in range(0, testNumber):
-        dataset = ImportData.convert()
+        dataset = ImportData.convert("data/divorce.csv")
         errors = crossValidation(dataset, subsetNumber, attributes, model)
         if len(avgErrors) == 0:
             avgErrors = errors
